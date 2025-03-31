@@ -140,3 +140,43 @@ class XarmEnv(EnvConfig):
             "visualization_height": self.visualization_height,
             "max_episode_steps": self.episode_length,
         }
+
+@EnvConfig.register_subclass("peg_insertion")
+@dataclass
+class PegInsertionEnv(EnvConfig):
+    task: str = "square-v0"
+    fps: int = 10
+    episode_length: int = 200
+    obs_type: str = "pixels_agent_pos_w_ft"
+    render_mode: str = "rgb_array"
+    features: dict[str, PolicyFeature] = field(
+        default_factory=lambda: {
+            "action": PolicyFeature(type=FeatureType.ACTION, shape=(3,)),
+        }
+    )
+    features_map: dict[str, str] = field(
+        default_factory=lambda: {
+            "action": ACTION,
+            "agent_pos": OBS_ROBOT,
+            "pixels/front": f"{OBS_IMAGES}.cam_front_view",
+            "pixels/eye_in_hand": f"{OBS_IMAGES}.cam_eye_in_hand",
+            "pixels/side": f"{OBS_IMAGES}.cam_side_view",
+        }
+    )
+
+    def __post_init__(self):
+        if self.obs_type == "pixels_agent_pos_no_ft":
+            self.features["agent_pos"] = PolicyFeature(type=FeatureType.STATE, shape=(6,))
+        elif self.obs_type == "pixels_agent_pos_with_ft":
+            self.features["agent_pos"] = PolicyFeature(type=FeatureType.STATE, shape=(12,))
+        self.features["pixels/front"] = PolicyFeature(type=FeatureType.VISUAL, shape=(256, 256, 3))
+        self.features["pixels/eye_in_hand"] = PolicyFeature(type=FeatureType.VISUAL, shape=(256, 256, 3))
+        self.features["pixels/side"] = PolicyFeature(type=FeatureType.VISUAL, shape=(256, 256, 3))
+
+    @property
+    def gym_kwargs(self) -> dict:
+        return {
+            "obs_type": self.obs_type,
+            "render_mode": self.render_mode,
+            "max_episode_steps": self.episode_length,
+        }

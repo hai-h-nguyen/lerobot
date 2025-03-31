@@ -58,6 +58,7 @@ available_tasks_per_env = {
     ],
     "pusht": ["PushT-v0"],
     "xarm": ["XarmLift-v0"],
+    "peg_insertion": ["square-v0"]
 }
 available_envs = list(available_tasks_per_env.keys())
 
@@ -85,6 +86,10 @@ available_datasets_per_env = {
         "lerobot/xarm_push_medium_image",
         "lerobot/xarm_push_medium_replay_image",
     ],
+    "peg_insertion": [
+        "hainh22/gym-peg-insertion-square-no-ft",
+        "hainh22/gym-peg-insertion-square-w-ft",
+    ]
 }
 
 available_real_world_datasets = [
@@ -203,6 +208,7 @@ available_policies_per_env = {
     "xarm": ["tdmpc"],
     "koch_real": ["act_koch_real"],
     "aloha_real": ["act_aloha_real"],
+    "peg_insertion": ["diffusion"]
 }
 
 env_task_pairs = [(env, task) for env, tasks in available_tasks_per_env.items() for task in tasks]
