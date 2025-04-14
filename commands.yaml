@@ -1,5 +1,6 @@
 # training
-python3 scripts/train.py --dataset.repo_id=hainh22/multi-modal-peg-in-square-hole --policy.type=diffusion --job_name=diffusion_peg_in_square_hole --wandb.enable=true --output_dir=output/peg-in-square-hole-test
+python3 lerobot/scripts/train.py --config train_configs/diffusion/square/configs_no_ft.json
+python3 lerobot/scripts/train.py --config train_configs/diffusion/square/configs_w_ft.json
 
 
 # peg in hole ft only

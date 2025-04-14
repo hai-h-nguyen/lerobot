@@ -1,6 +1,6 @@
 {
     "dataset": {
-        "repo_id": "hainh22/gym-peg-insertion-square-no-ft",
+        "repo_id": "hainh22/gym-peg-insertion-triangle-no-ft",
         "root": null,
         "episodes": null,
         "image_transforms": {
@@ -66,14 +66,14 @@
     },
     "env": {
         "type": "peg_insertion",
-        "task": "square-v0",
-        "episode_length": 300,
+        "task": "triangle-v0",
+        "episode_length": 200,
         "fps": 10,
         "obs_type": "pixels_agent_pos_no_ft"
     },
     "policy": {
         "type": "diffusion",
-        "n_obs_steps": 8,
+        "n_obs_steps": 32,
         "normalization_mapping": {
             "VISUAL": "MEAN_STD",
             "STATE": "MIN_MAX",
@@ -103,8 +103,8 @@
                 ]
             }
         },
-        "horizon": 16,
-        "n_action_steps": 8,
+        "horizon": 64,
+        "n_action_steps": 32,
         "drop_n_last_frames": 7,
         "vision_backbone": "resnet18",
         "crop_shape": [
@@ -145,8 +145,8 @@
         "scheduler_name": "cosine",
         "scheduler_warmup_steps": 500
     },
-    "output_dir": "output/peg-insertion-square-front-view-no-ft",
-    "job_name": "diffusion_peg_insertion_square_front_view_no_ft",
+    "output_dir": "output/peg-insertion-triangle-front-view-32-no-ft",
+    "job_name": "diffusion_peg_insertion_triangle_front_view_32_no_ft",
     "resume": false,
     "device": "cuda",
     "use_amp": false,

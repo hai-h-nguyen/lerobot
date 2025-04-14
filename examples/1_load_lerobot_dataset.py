@@ -89,8 +89,6 @@ camera_key = dataset.meta.camera_keys[0]
 frames = [dataset[idx][camera_key] for idx in range(from_idx, to_idx)]
 
 # The objects returned by the dataset are all torch.Tensors
-print(type(frames[0]))
-print(frames[0].shape)
 
 # Since we're using pytorch, the shape is in pytorch, channel-first convention (c, h, w).
 # We can compare this shape with the information available for that feature

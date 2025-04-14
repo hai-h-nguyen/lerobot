@@ -64,7 +64,13 @@
         "use_imagenet_stats": true,
         "video_backend": "pyav"
     },
-    "env": null,
+    "env": {
+        "type": "peg_insertion",
+        "task": "square-v0",
+        "episode_length": 300,
+        "fps": 10,
+        "obs_type": "pixels_agent_pos_w_ft"
+    },
     "policy": {
         "type": "diffusion",
         "n_obs_steps": 8,
@@ -80,23 +86,7 @@
                     12
                 ]
             },
-            "observation.images.cam_front_view": {
-                "type": "VISUAL",
-                "shape": [
-                    128,
-                    128,
-                    3
-                ]
-            },
-            "observation.images.cam_eye_in_hand": {
-                "type": "VISUAL",
-                "shape": [
-                    128,
-                    128,
-                    3
-                ]
-            },
-            "observation.images.cam_side_view": {
+            "observation.images.front": {
                 "type": "VISUAL",
                 "shape": [
                     128,
@@ -155,15 +145,15 @@
         "scheduler_name": "cosine",
         "scheduler_warmup_steps": 500
     },
-    "output_dir": "output/peg-insertion-square-windowed-ft",
-    "job_name": "diffusion_peg_insertion_square_windowed_ft",
+    "output_dir": "output/peg-insertion-square-front-view-windowed-ft",
+    "job_name": "diffusion_peg_insertion_square_front_view_windowed_ft",
     "resume": false,
     "device": "cuda",
     "use_amp": false,
     "seed": 1000,
     "num_workers": 4,
     "batch_size": 8,
-    "steps": 150000,
+    "steps": 300000,
     "eval_freq": 20000,
     "log_freq": 200,
     "save_checkpoint": true,
@@ -187,7 +177,7 @@
     },
     "eval": {
         "n_episodes": 50,
-        "batch_size": 50,
+        "batch_size": 10,
         "use_async_envs": false
     },
     "wandb": {

@@ -18,15 +18,17 @@ import torch
 
 from lerobot.common.policies.diffusion.modeling_diffusion import DiffusionPolicy
 
+peg_type = 'triangle'
+
 # Create a directory to store the video of the evaluation
-output_directory = Path("output/eval/peg-insertion-square-no-ft")
+output_directory = Path(f"output/eval/peg-insertion-{peg_type}-no-ft")
 output_directory.mkdir(parents=True, exist_ok=True)
 
 # Select your device
 device = "cuda"
 
 # Provide the [hugging face repo id](https://huggingface.co/lerobot/diffusion_pusht):
-pretrained_policy_path = Path("output/peg-insertion-square-no-ft/checkpoints/last/pretrained_model")
+pretrained_policy_path = Path(f"output/peg-insertion-{peg_type}-front-view-no-ft/checkpoints/last/pretrained_model")
 # OR a path to a local outputs/train folder.
 
 policy = DiffusionPolicy.from_pretrained(pretrained_policy_path, map_location=device)
@@ -35,7 +37,7 @@ policy = DiffusionPolicy.from_pretrained(pretrained_policy_path, map_location=de
 # an image of the scene and state/position of the agent. The environment
 # also automatically stops running after 300 interactions/steps.
 env = gym.make(
-    "gym_peg_insertion/square-v0",
+    f"gym_peg_insertion/{peg_type}-v0",
     obs_type="pixels_agent_pos_no_ft",
     render_mode="rgb_array",
     max_episode_steps=200,
@@ -74,9 +76,9 @@ for episode_idx in range(num_test_episodes):
     while not done:
         # Prepare observation for the policy running in Pytorch
         state = torch.from_numpy(numpy_observation["agent_pos"].copy())  # Extract the state from the numpy observation
-        image_front_view = torch.from_numpy(numpy_observation["pixels/front"].copy())
-        image_eye_in_hand = torch.from_numpy(numpy_observation["pixels/eye_in_hand"].copy())
-        image_side_view = torch.from_numpy(numpy_observation["pixels/side"].copy())
+        image_front_view = torch.from_numpy(numpy_observation["pixels"]["front"].copy())
+        image_eye_in_hand = torch.from_numpy(numpy_observation["pixels"]["eye_in_hand"].copy())
+        image_side_view = torch.from_numpy(numpy_observation["pixels"]["side"].copy())
 
         image_front_view = image_front_view.permute(2, 0, 1)  # Change from HWC to CHW format for PyTorch
         image_eye_in_hand = image_eye_in_hand.permute(2, 0, 1)  # Change from HWC to CHW format for PyTorch
@@ -104,9 +106,9 @@ for episode_idx in range(num_test_episodes):
         # Create the policy input dictionary
         observation = {
             "observation.state": state,
-            "observation.images.cam_front_view": image_front_view,
-            "observation.images.cam_eye_in_hand": image_eye_in_hand,
-            "observation.images.cam_side_view": image_side_view,
+            "observation.images.front": image_front_view,
+            "observation.images.eye_in_hand": image_eye_in_hand,
+            "observation.images.side": image_side_view,
         }
 
         # Predict the next action with respect to the current observation
